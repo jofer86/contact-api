@@ -11,7 +11,7 @@ INVALID_MAX_STRING = 'a' * 26
 RSpec.describe Contact, type: :model do
   describe '#validations' do
     it 'should expect that the factory is a valid one' do
-      expect((build :contact)).to be_valid    
+      expect((build :contact)).to be_valid
     end
 
     it 'should validate the presence of the first_name property' do
@@ -74,6 +74,24 @@ RSpec.describe Contact, type: :model do
       contact = build :contact, phone_number: ''
       expect(contact).not_to be_valid
       expect(contact.errors.messages[:phone_number]).to include("can't be blank")
+    end
+
+    it 'should validate the numericality of the phone_number property' do
+      valid_contact = create :contact
+      invalid_contact = build :contact, phone_number: 'a9625574324'
+      expect(valid_contact).to be_valid
+      expect(invalid_contact).to_not be_valid
+      expect(invalid_contact.errors.messages[:phone_number]).to include('input numbers only please')
+    end
+
+    it 'should validate the length of the phone_number property' do
+      valid_contact = create :contact
+      invalid_min_contact = build :contact, phone_number: 1234567890
+      invalid_max_contact = build :contact, phone_number: 12345678901234
+      expect(invalid_min_contact).not_to be_valid
+      expect(invalid_min_contact.errors.messages[:phone_number]).to include("is too short (minimum is 11 characters)")
+      expect(invalid_max_contact).not_to be_valid
+      expect(invalid_max_contact.errors.messages[:phone_number]).to include("is too long (maximum is 13 characters)")
     end
   end
 end
