@@ -67,7 +67,7 @@ RSpec.describe Contact, type: :model do
       invalid_contact = build :contact, email: 'notvalidgmail.com'
       expect(valid_contact).to be_valid
       expect(invalid_contact).not_to be_valid
-      expect(invalid_contact.errors.messages[:email]).to include('is invalid')
+      expect(invalid_contact.errors.messages[:email]).to include('invalid email format')
     end
 
     it 'should validate the presence of the phone_number property' do
