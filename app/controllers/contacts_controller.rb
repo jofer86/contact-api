@@ -1,6 +1,7 @@
 class ContactsController < ApplicationController
   def index
-    render json: {}
+    contacts = Contact.all
+    render json: contacts
   end
 
   def show

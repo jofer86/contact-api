@@ -11,9 +11,8 @@ describe ContactsController do
             create_list :contact, 2 
             get :index
             json = JSON.parse(response.body)
-            pp json
-            # json_data = json[:data]
-            # expect((json_data).length).to eq(2)
+            json_data = json['data']
+            expect(json_data.length).to eq(2)
         end
     end
 end
