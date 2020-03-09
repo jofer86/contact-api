@@ -1,6 +1,6 @@
 class ContactsController < ApplicationController
   def index
-    contacts = Contact.all
+    contacts = Contact.recent
     render json: contacts
   end
 

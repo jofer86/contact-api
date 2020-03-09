@@ -9,4 +9,5 @@ class Contact < ApplicationRecord
             presence: true,
             numericality: { message: 'input numbers only please' },
             length: { minimum: 11, maximum: 13 }
+  scope :recent, -> { order(created_at: :desc) }
 end

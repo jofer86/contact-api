@@ -93,5 +93,18 @@ RSpec.describe Contact, type: :model do
       expect(invalid_max_contact).not_to be_valid
       expect(invalid_max_contact.errors.messages[:phone_number]).to include("is too long (maximum is 13 characters)")
     end
+    describe '.recent' do
+      it 'should show the most recent contact first' do
+        old_contact = create :contact
+        new_contact = create :contact
+        expect(described_class.recent).to eq(
+          [ new_contact, old_contact ]
+        )
+        old_contact.update_column :created_at, Time.now
+        expect(described_class.recent).to eq(
+          [ old_contact, new_contact  ]
+        )
+      end
+    end
   end
 end

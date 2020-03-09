@@ -9,9 +9,9 @@ describe ContactsController do
         end
 
         it 'should return proper json' do
-            contacts = create_list :contact, 2 
-            subject           
-            contacts.each_with_index do |contact, i|
+            create_list :contact, 2
+            subject       
+            Contact.recent.each_with_index do |contact, i|
                 expect(json_data[i]['attributes']).to eq({
                     "email" => contact.email,
                     "first-name" => contact.first_name,
@@ -19,6 +19,13 @@ describe ContactsController do
                     "phone-number" => contact.phone_number
                 })
             end
+        end
+        it 'should return contacts in the proper order' do
+            old_contact = create :contact
+            new_contact = create :contact
+            subject
+            expect(json_data.first['id']).to eq(new_contact.id.to_s)
+            expect(json_data.last['id']).to eq(old_contact.id.to_s)
         end
     end
 end
