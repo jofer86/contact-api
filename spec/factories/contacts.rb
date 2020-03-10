@@ -2,10 +2,10 @@
 
 FactoryBot.define do
   factory :contact do
-    sequence(:first_name) {|n| "My first name #{n}"}
-    sequence(:last_name) {|n| "my last name #{n}"}
+    sequence(:firstname) {|n| "My first name #{n}"}
+    sequence(:lastname) {|n| "my last name #{n}"}
     sequence(:email) {|n| "myemail#{n}@example.com"}
-    sequence(:phone_number) {|n| "#{n}29612255035" }
+    sequence(:phonenumber) {|n| "#{n}29612255035" }
 
   end
 end

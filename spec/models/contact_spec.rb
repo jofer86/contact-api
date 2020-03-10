@@ -11,41 +11,43 @@ INVALID_MAX_STRING = 'a' * 26
 RSpec.describe Contact, type: :model do
   describe '#validations' do
     it 'should expect that the factory is a valid one' do
-      expect((build :contact)).to be_valid
+      contact = build :contact
+      pp contact
+      expect(contact).to be_valid
     end
 
     it 'should validate the presence of the first_name property' do
-      contact = build :contact, first_name: ''
+      contact = build :contact, firstname: ''
       expect(contact).not_to be_valid
-      expect(contact.errors.messages[:first_name]).to include("can't be blank")
+      expect(contact.errors.messages[:firstname]).to include("can't be blank")
     end
 
-    it 'should validate apropriate length for first_name property' do
-      valid_min_contact = build :contact, first_name: VALID_MIN_STRING
-      valid_max_contact = build :contact, first_name: VALID_MAX_STRING
-      invalid_min_contact = build :contact, first_name: INVALID_MIN_STRING
-      invalid_max_contact = build :contact, first_name: INVALID_MAX_STRING
+    it 'should validate apropriate length for firstname property' do
+      valid_min_contact = build :contact, firstname: VALID_MIN_STRING
+      valid_max_contact = build :contact, firstname: VALID_MAX_STRING
+      invalid_min_contact = build :contact, firstname: INVALID_MIN_STRING
+      invalid_max_contact = build :contact, firstname: INVALID_MAX_STRING
       expect(valid_min_contact).to be_valid
       expect(valid_max_contact).to be_valid
       expect(invalid_min_contact).to_not be_valid
       expect(invalid_max_contact).to_not be_valid
     end
 
-    it 'should validate apropriate length for last_name property' do
-      valid_min_contact = build :contact, last_name: VALID_MIN_STRING
-      valid_max_contact = build :contact, last_name: VALID_MAX_STRING
-      invalid_min_contact = build :contact, last_name: INVALID_MIN_STRING
-      invalid_max_contact = build :contact, last_name: INVALID_MAX_STRING
+    it 'should validate apropriate length for lastname property' do
+      valid_min_contact = build :contact, lastname: VALID_MIN_STRING
+      valid_max_contact = build :contact, lastname: VALID_MAX_STRING
+      invalid_min_contact = build :contact, lastname: INVALID_MIN_STRING
+      invalid_max_contact = build :contact, lastname: INVALID_MAX_STRING
       expect(valid_min_contact).to be_valid
       expect(valid_max_contact).to be_valid
       expect(invalid_min_contact).to_not be_valid
       expect(invalid_max_contact).to_not be_valid
     end
 
-    it 'should validate the presence of the last_name property' do
-      contact = build :contact, last_name: ''
+    it 'should validate the presence of the lastname property' do
+      contact = build :contact, lastname: ''
       expect(contact).not_to be_valid
-      expect(contact.errors.messages[:last_name]).to include("can't be blank")
+      expect(contact.errors.messages[:lastname]).to include("can't be blank")
     end
 
     it 'should validate the presence of the email property' do
@@ -70,28 +72,28 @@ RSpec.describe Contact, type: :model do
       expect(invalid_contact.errors.messages[:email]).to include('invalid email format')
     end
 
-    it 'should validate the presence of the phone_number property' do
-      contact = build :contact, phone_number: ''
+    it 'should validate the presence of the phonenumber property' do
+      contact = build :contact, phonenumber: ''
       expect(contact).not_to be_valid
-      expect(contact.errors.messages[:phone_number]).to include("can't be blank")
+      expect(contact.errors.messages[:phonenumber]).to include("can't be blank")
     end
 
-    it 'should validate the numericality of the phone_number property' do
+    it 'should validate the numericality of the phonenumber property' do
       valid_contact = create :contact
-      invalid_contact = build :contact, phone_number: 'a9625574324'
+      invalid_contact = build :contact, phonenumber: 'a9625574324'
       expect(valid_contact).to be_valid
       expect(invalid_contact).to_not be_valid
-      expect(invalid_contact.errors.messages[:phone_number]).to include('input numbers only please')
+      expect(invalid_contact.errors.messages[:phonenumber]).to include('input numbers only please')
     end
 
-    it 'should validate the length of the phone_number property' do
+    it 'should validate the length of the phonenumber property' do
       valid_contact = create :contact
-      invalid_min_contact = build :contact, phone_number: 1234567890
-      invalid_max_contact = build :contact, phone_number: 12345678901234
+      invalid_min_contact = build :contact, phonenumber: 1234567890
+      invalid_max_contact = build :contact, phonenumber: 12345678901234
       expect(invalid_min_contact).not_to be_valid
-      expect(invalid_min_contact.errors.messages[:phone_number]).to include("is too short (minimum is 11 characters)")
+      expect(invalid_min_contact.errors.messages[:phonenumber]).to include("is too short (minimum is 11 characters)")
       expect(invalid_max_contact).not_to be_valid
-      expect(invalid_max_contact.errors.messages[:phone_number]).to include("is too long (maximum is 13 characters)")
+      expect(invalid_max_contact.errors.messages[:phonenumber]).to include("is too long (maximum is 13 characters)")
     end
     describe '.recent' do
       it 'should show the most recent contact first' do

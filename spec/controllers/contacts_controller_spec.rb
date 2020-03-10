@@ -14,9 +14,9 @@ describe ContactsController do
             Contact.recent.each_with_index do |contact, i|
                 expect(json_data[i]['attributes']).to eq({
                     "email" => contact.email,
-                    "first-name" => contact.first_name,
-                    "last-name" => contact.last_name,          
-                    "phone-number" => contact.phone_number
+                    "firstname" => contact.firstname,
+                    "lastname" => contact.lastname,          
+                    "phonenumber" => contact.phonenumber
                 })
             end
         end
@@ -40,10 +40,10 @@ describe ContactsController do
                 {
                     data: {
                         attributes: {
-                            frist_name: '',
-                            last_name: '',
+                            fristname: '',
+                            lastname: '',
                             email: '',
-                            phone_number: '',
+                            phonenumber: '',
                         }
                     }
                 }
@@ -57,22 +57,22 @@ describe ContactsController do
             it 'should return an error to have proper json format' do
                 subject        
                 expect(json['errors']).to include(
-                   {"source"=>{"pointer"=>"/data/attributes/first-name"},
+                   {"source"=>{"pointer"=>"/data/attributes/firstname"},
                    "detail"=>"can't be blank"},
-                   {"source"=>{"pointer"=>"/data/attributes/first-name"},
+                   {"source"=>{"pointer"=>"/data/attributes/firstname"},
                     "detail"=>"is too short (minimum is 3 characters)"},
-                   {"source"=>{"pointer"=>"/data/attributes/last-name"},
+                   {"source"=>{"pointer"=>"/data/attributes/lastname"},
                     "detail"=>"can't be blank"},
-                   {"source"=>{"pointer"=>"/data/attributes/last-name"},
+                   {"source"=>{"pointer"=>"/data/attributes/lastname"},
                     "detail"=>"is too short (minimum is 3 characters)"},
                    {"source"=>{"pointer"=>"/data/attributes/email"}, "detail"=>"can't be blank"},
                    {"source"=>{"pointer"=>"/data/attributes/email"},
                     "detail"=>"invalid email format"},
-                   {"source"=>{"pointer"=>"/data/attributes/phone-number"},
+                   {"source"=>{"pointer"=>"/data/attributes/phonenumber"},
                     "detail"=>"can't be blank"},
-                   {"source"=>{"pointer"=>"/data/attributes/phone-number"},
+                   {"source"=>{"pointer"=>"/data/attributes/phonenumber"},
                     "detail"=>"input numbers only please"},
-                   {"source"=>{"pointer"=>"/data/attributes/phone-number"},
+                   {"source"=>{"pointer"=>"/data/attributes/phonenumber"},
                     "detail"=>"is too short (minimum is 11 characters)"}
             )
             end
@@ -81,10 +81,10 @@ describe ContactsController do
             {
                 'data' => {
                     'attributes' => {
-                        'first_name' => 'jorge',
-                        'last_name' => 'rincon',
+                        'firstname' => 'jorge',
+                        'lastname' => 'rincon',
                         'email' => 'jorge@example.com',
-                        'phone_number' => 529612255035,
+                        'phonenumber' => 529612255035,
                     }
                 }
             }

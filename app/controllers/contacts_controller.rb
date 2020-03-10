@@ -24,7 +24,7 @@ class ContactsController < ApplicationController
 
   def contact_params
     params.require(:data).require(:attributes).
-      permit(:first_name, :last_name, :email, :phone_number) ||
+      permit(:firstname, :lastname, :email, :phonenumber) ||
     ActionController::Parameters.new
   end
 
