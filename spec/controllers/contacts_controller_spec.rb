@@ -77,6 +77,32 @@ describe ContactsController do
             )
             end
         end
+        let(:valid_attributes) do
+            {
+                'data' => {
+                    'attributes' => {
+                        'frist_name' => 'jorge',
+                        'last_name' => 'rincon',
+                        'email' => 'jorge@example.com',
+                        'phone_number' => 529612255035,
+                    }
+                }
+            }
+        end
+        subject { post :create, params: valid_attributes }
+
+        it 'should return a 201 status code' do
+            subject
+            expect(response).to have_http_status(:created)
+        end
+        it 'should return a proper json body' do
+            subject
+            expect(json_data).to include(valid_attributes)
+        end
+
+        it 'should create the article' do
+            expect{ subject }.to change{ Contact.count }.by(1)
+        end
     end
 end
 
