@@ -81,7 +81,7 @@ describe ContactsController do
             {
                 'data' => {
                     'attributes' => {
-                        'frist_name' => 'jorge',
+                        'first_name' => 'jorge',
                         'last_name' => 'rincon',
                         'email' => 'jorge@example.com',
                         'phone_number' => 529612255035,
@@ -97,7 +97,7 @@ describe ContactsController do
         end
         it 'should return a proper json body' do
             subject
-            expect(json_data).to include(valid_attributes)
+            expect(json_data['attributes']).to include(valid_attributes['data']['attributes'])
         end
 
         it 'should create the article' do
