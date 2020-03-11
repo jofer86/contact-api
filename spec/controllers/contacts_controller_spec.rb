@@ -179,7 +179,7 @@ describe ContactsController do
         end
     end
     describe '#destroy' do
-        let (:contact) { create :contact }
+        let(:contact) { create :contact }
         subject { delete :destroy, params: { id: contact.id } }
 
         it 'should return a 204 status code' do
@@ -192,6 +192,7 @@ describe ContactsController do
         end
 
         it 'should obliterate the article' do
+            pp contact
             expect{ subject }.to change{ Contact.count }.by(-1)
         end
     end

@@ -11,8 +11,7 @@ INVALID_MAX_STRING = 'a' * 26
 RSpec.describe Contact, type: :model do
   describe '#validations' do
     it 'should expect that the factory is a valid one' do
-      contact = build :contact
-      pp contact
+      contact = build :contact      
       expect(contact).to be_valid
     end
 
