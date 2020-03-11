@@ -34,6 +34,80 @@ describe ContactsController do
             expect(json_data.first['id']).to eq(Contact.recent.second.id.to_s)
         end
     end
+    describe '#update' do
+        let(:contact){ create :contact }
+        context 'invalid parameters are being provided' do
+            let(:invalid_attributes) do
+                {
+                    data: {
+                        attributes: {
+                            fristname: '',
+                            lastname: '',
+                            email: '',
+                            phonenumber: '',
+                        }
+                    }
+                }
+            end
+            subject do
+                patch :update, params: invalid_attributes.merge(id: contact.id)
+            end
+            it 'should return status code 422' do
+                subject                
+                expect(response).to have_http_status(:unprocessable_entity)
+            end
+
+            it 'should return an error to have proper json format' do
+                subject
+                expect(json['errors']).to include(
+                    {"source"=>{"pointer"=>"/data/attributes/lastname"},
+                    "detail"=>"can't be blank"},
+                   {"source"=>{"pointer"=>"/data/attributes/lastname"},
+                    "detail"=>"is too short (minimum is 3 characters)"},
+                   {"source"=>{"pointer"=>"/data/attributes/email"}, "detail"=>"can't be blank"},
+                   {"source"=>{"pointer"=>"/data/attributes/email"},
+                    "detail"=>"invalid email format"},
+                   {"source"=>{"pointer"=>"/data/attributes/phonenumber"},
+                    "detail"=>"can't be blank"},
+                   {"source"=>{"pointer"=>"/data/attributes/phonenumber"},
+                    "detail"=>"input numbers only please"},
+                   {"source"=>{"pointer"=>"/data/attributes/phonenumber"},
+                    "detail"=>"is too short (minimum is 11 characters)"}
+            )
+            end
+        end
+        let(:valid_attributes) do
+            {
+                'data' => {
+                    'attributes' => {
+                        'firstname' => contact.firstname,
+                        'lastname' => contact.lastname,
+                        'email' => contact.email,
+                        'phonenumber' => contact.phonenumber,
+                    }
+                }
+            }
+        end
+        subject do
+            patch :update, params: valid_attributes.merge(id: contact.id)
+        end
+
+        it 'should return a 201 status code' do
+            subject
+            expect(response).to have_http_status(:created)
+        end
+        it 'should return a proper json body' do
+            subject
+            expect(json_data['attributes']).to include(valid_attributes['data']['attributes'])
+        end
+
+        it 'should update the article' do
+            subject
+            expect(contact.reload.firstname).to eq(
+                valid_attributes['data']['attributes']['firstname']
+            )
+        end
+    end
     describe '#create' do
         context 'invalid parameters are being provided' do
             let(:invalid_attributes) do

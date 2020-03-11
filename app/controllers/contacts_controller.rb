@@ -20,6 +20,17 @@ class ContactsController < ApplicationController
     end
   end
 
+  def update
+    contact = Contact.find(params[:id])
+    contact.update_attributes!(contact_params)
+    render json: contact, status: 201
+  rescue
+    render json: contact, adapter: :json_api,
+    serializer: ActiveModel::Serializer::ErrorSerializer,
+    status: :unprocessable_entity
+  
+  end
+
   private
 
   def contact_params
