@@ -34,6 +34,76 @@ describe ContactsController do
             expect(json_data.first['id']).to eq(Contact.recent.second.id.to_s)
         end
     end
+    describe '#create' do
+        context 'invalid parameters are being provided' do
+            let(:invalid_attributes) do
+                {
+                    data: {
+                        attributes: {
+                            fristname: '',
+                            lastname: '',
+                            email: '',
+                            phonenumber: '',
+                        }
+                    }
+                }
+            end
+            subject { post :create, params: invalid_attributes }
+            it 'should return status code 422' do
+                subject                
+                expect(response).to have_http_status(:unprocessable_entity)
+            end
+
+            it 'should return an error to have proper json format' do
+                subject        
+                expect(json['errors']).to include(
+                   {"source"=>{"pointer"=>"/data/attributes/firstname"},
+                   "detail"=>"can't be blank"},
+                   {"source"=>{"pointer"=>"/data/attributes/firstname"},
+                    "detail"=>"is too short (minimum is 3 characters)"},
+                   {"source"=>{"pointer"=>"/data/attributes/lastname"},
+                    "detail"=>"can't be blank"},
+                   {"source"=>{"pointer"=>"/data/attributes/lastname"},
+                    "detail"=>"is too short (minimum is 3 characters)"},
+                   {"source"=>{"pointer"=>"/data/attributes/email"}, "detail"=>"can't be blank"},
+                   {"source"=>{"pointer"=>"/data/attributes/email"},
+                    "detail"=>"invalid email format"},
+                   {"source"=>{"pointer"=>"/data/attributes/phonenumber"},
+                    "detail"=>"can't be blank"},
+                   {"source"=>{"pointer"=>"/data/attributes/phonenumber"},
+                    "detail"=>"input numbers only please"},
+                   {"source"=>{"pointer"=>"/data/attributes/phonenumber"},
+                    "detail"=>"is too short (minimum is 11 characters)"}
+            )
+            end
+        end
+        let(:valid_attributes) do
+            {
+                'data' => {
+                    'attributes' => {
+                        'firstname' => 'jorge',
+                        'lastname' => 'rincon',
+                        'email' => 'jorge@example.com',
+                        'phonenumber' => 529612255035,
+                    }
+                }
+            }
+        end
+        subject { post :create, params: valid_attributes }
+
+        it 'should return a 201 status code' do
+            subject
+            expect(response).to have_http_status(:created)
+        end
+        it 'should return a proper json body' do
+            subject
+            expect(json_data['attributes']).to include(valid_attributes['data']['attributes'])
+        end
+
+        it 'should create the article' do
+            expect{ subject }.to change{ Contact.count }.by(1)
+        end
+    end
     describe '#update' do
         let(:contact){ create :contact }
         context 'invalid parameters are being provided' do
@@ -108,74 +178,21 @@ describe ContactsController do
             )
         end
     end
-    describe '#create' do
-        context 'invalid parameters are being provided' do
-            let(:invalid_attributes) do
-                {
-                    data: {
-                        attributes: {
-                            fristname: '',
-                            lastname: '',
-                            email: '',
-                            phonenumber: '',
-                        }
-                    }
-                }
-            end
-            subject { post :create, params: invalid_attributes }
-            it 'should return status code 422' do
-                subject                
-                expect(response).to have_http_status(:unprocessable_entity)
-            end
+    describe '#destroy' do
+        let (:contact) { create :contact }
+        subject { delete :destroy, params: { id: contact.id } }
 
-            it 'should return an error to have proper json format' do
-                subject        
-                expect(json['errors']).to include(
-                   {"source"=>{"pointer"=>"/data/attributes/firstname"},
-                   "detail"=>"can't be blank"},
-                   {"source"=>{"pointer"=>"/data/attributes/firstname"},
-                    "detail"=>"is too short (minimum is 3 characters)"},
-                   {"source"=>{"pointer"=>"/data/attributes/lastname"},
-                    "detail"=>"can't be blank"},
-                   {"source"=>{"pointer"=>"/data/attributes/lastname"},
-                    "detail"=>"is too short (minimum is 3 characters)"},
-                   {"source"=>{"pointer"=>"/data/attributes/email"}, "detail"=>"can't be blank"},
-                   {"source"=>{"pointer"=>"/data/attributes/email"},
-                    "detail"=>"invalid email format"},
-                   {"source"=>{"pointer"=>"/data/attributes/phonenumber"},
-                    "detail"=>"can't be blank"},
-                   {"source"=>{"pointer"=>"/data/attributes/phonenumber"},
-                    "detail"=>"input numbers only please"},
-                   {"source"=>{"pointer"=>"/data/attributes/phonenumber"},
-                    "detail"=>"is too short (minimum is 11 characters)"}
-            )
-            end
-        end
-        let(:valid_attributes) do
-            {
-                'data' => {
-                    'attributes' => {
-                        'firstname' => 'jorge',
-                        'lastname' => 'rincon',
-                        'email' => 'jorge@example.com',
-                        'phonenumber' => 529612255035,
-                    }
-                }
-            }
-        end
-        subject { post :create, params: valid_attributes }
-
-        it 'should return a 201 status code' do
+        it 'should return a 204 status code' do
             subject
-            expect(response).to have_http_status(:created)
+            expect(response).to have_http_status(:no_content)
         end
-        it 'should return a proper json body' do
+        it 'should return an empty json body' do
             subject
-            expect(json_data['attributes']).to include(valid_attributes['data']['attributes'])
+            expect(response.body).to be_blank
         end
 
-        it 'should create the article' do
-            expect{ subject }.to change{ Contact.count }.by(1)
+        it 'should obliterate the article' do
+            expect{ subject }.to change{ Contact.count }.by(-1)
         end
     end
 end

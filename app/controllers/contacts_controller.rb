@@ -27,8 +27,11 @@ class ContactsController < ApplicationController
   rescue
     render json: contact, adapter: :json_api,
     serializer: ActiveModel::Serializer::ErrorSerializer,
-    status: :unprocessable_entity
-  
+    status: :unprocessable_entity  
+  end
+
+  def destroy
+    
   end
 
   private
