@@ -91,7 +91,7 @@ describe ContactsController do
         end
         subject { post :create, params: valid_attributes }
 
-        it 'should return a 201 status code' do
+        it 'should return a 201 status codes' do
             subject
             expect(response).to have_http_status(:created)
         end
